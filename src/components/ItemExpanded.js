@@ -20,60 +20,59 @@ class ItemExpanded extends React.Component {
     });
   };
 
-  renderDescription = () => {
-    if (this.props.itemSelected) {
-      if (this.props.itemSelected.description !== "") {
-        return (
-          <Text style={styles.description}>
-            {this.props.itemSelected.description}
-          </Text>
-        );
-      } else {
-        return (
-          <View style={styles.inputView}>
-            <TextInput
-              style={styles.input}
-              value={this.state.description}
-              onChangeText={this.handleChange}
-              placeholder="Add a description!"
-              underlineColorAndroid="transparent"
-              selectionColor="#fff"
-            />
-            <Button
-              title="Add"
-              style={styles.button}
-              value={""}
-              onPress={() => this.props.addDescription(this.state.description)}
-              color="rgba(255, 255, 255, 0.3)"
-            />
-          </View>
-        );
-      }
-    } else {
-      return <Text />;
-    }
-  };
+  // renderDescription = () => {
+  //   if (this.props.itemSelected) {
+  //     if (this.props.itemSelected.description !== "") {
+  //       return (
+  //         <Text style={styles.description}>
+  //           {this.props.itemSelected.description}
+  //         </Text>
+  //       );
+  //     } else {
+  //       return (
+  //         <View style={styles.inputView}>
+  //           <TextInput
+  //             style={styles.input}
+  //             value={this.state.description}
+  //             onChangeText={this.handleChange}
+  //             placeholder="Add a description!"
+  //             underlineColorAndroid="transparent"
+  //             selectionColor="#fff"
+  //           />
+  //           <Button
+  //             title="Add"
+  //             style={styles.button}
+  //             value={""}
+  //             onPress={() => this.props.addDescription(this.state.description)}
+  //             color="rgba(255, 255, 255, 0.3)"
+  //           />
+  //         </View>
+  //       );
+  //     }
+  //   } else {
+  //     return <Text />;
+  //   }
+  // };
   render() {
     return (
       <Modal
         animationType="slide"
         visible={this.props.itemSelected !== null}
-        onRequestClose={() => this.props.onCloseItem()}
+        onRequestClose={() => this.props.onDeselectTask()}
       >
         <View style={styles.container}>
           <Text style={styles.title}>
-            {this.props.itemSelected ? this.props.itemSelected.value : ""}
+            {this.props.itemSelected ? this.props.itemSelected.name : ""}
           </Text>
           <Text style={{ paddingTop: 20, fontWeight: "bold", color: "#fff" }}>
             Description:
           </Text>
-          {this.renderDescription()}
           <View style={styles.buttonGroup}>
             <View style={{ paddingRight: 5 }}>
               <Button
                 title="Back"
                 value={""}
-                onPress={() => this.props.onCloseItem()}
+                onPress={() => this.props.onDeselectTask()}
                 color="rgba(255, 255, 255, 0.3)"
               />
             </View>
@@ -81,7 +80,7 @@ class ItemExpanded extends React.Component {
               <Button
                 title="Delete"
                 value={""}
-                onPress={() => this.props.onDelete()}
+                onPress={() => this.props.onDeleteTask()}
                 color="red"
               />
             </View>

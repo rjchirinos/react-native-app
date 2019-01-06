@@ -10,8 +10,8 @@ const TodoList = props => {
       data={props.items}
       renderItem={info => (
         <ListItem
-          listItem={info.item.value}
-          onItemPressed={() => props.onItemDeleted(info.item.key)}
+          listItem={info.item.name}
+          onItemPressed={() => props.onSelectTask(info.item.key)}
         />
       )}
     />

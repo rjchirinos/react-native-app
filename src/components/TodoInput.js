@@ -31,7 +31,7 @@ class TodoInput extends React.Component {
           title="Add"
           style={styles.button}
           value={""}
-          onPress={() => this.props.handleClick(this.state.placeName)}
+          onPress={() => this.props.onAddTask(this.state.placeName)}
           color="rgba(255, 255, 255, 0.3)"
         />
       </View>

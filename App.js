@@ -1,77 +1,57 @@
 import React from "react";
 import { StyleSheet, TextInput, View, Text, Button } from "react-native";
+import { connect } from "react-redux";
 
 import ListItem from "./src/components/ListItem";
 import TodoList from "./src/components/TodoList";
 import TodoInput from "./src/components/TodoInput";
 import ItemExpanded from "./src/components/ItemExpanded";
+import configureStore from "./src/store/configureStore";
+import {
+  addTask,
+  deleteTask,
+  selectTask,
+  deselectTask
+} from "./src/store/actions/index";
 
-export default class App extends React.Component {
-  state = {
-    items: [],
-    itemSelected: null
-  };
-
+class App extends React.Component {
   itemAddedHandler = placeName => {
-    if (placeName.trim() !== "") {
-      this.setState({
-        items: this.state.items.concat({
-          key: Math.random(),
-          value: placeName,
-          description: ""
-        })
-      });
-    }
+    this.props.onAddTask(placeName);
   };
 
   deleteItemHandler = () => {
-    this.setState(prevState => {
-      return {
-        items: prevState.items.filter(item => {
-          return item.key !== prevState.itemSelected.key;
-        }),
-        itemSelected: null
-      };
-    });
+    this.props.onDeleteTask();
   };
 
   itemSelectedHandler = key => {
-    this.setState(prevState => {
-      return {
-        itemSelected: prevState.items.find(item => {
-          return item.key === key;
-        })
-      };
-    });
+    this.props.onSelectTask(key);
   };
 
   closeItemHandler = () => {
-    this.setState({
-      itemSelected: null
-    });
+    this.props.onDeselectTask();
   };
 
-  addDescriptionHandler = description => {
-    this.setState(prevState => {
-      return {
-        itemSelected: {
-          key: prevState.itemSelected.key,
-          value: prevState.itemSelected.value,
-          description: description
-        }
-      };
-    });
-  };
+  // addDescriptionHandler = description => {
+  //   this.setState(prevState => {
+  //     return {
+  //       itemSelected: {
+  //         key: prevState.itemSelected.key,
+  //         value: prevState.itemSelected.value,
+  //         description: description
+  //       }
+  //     };
+  //   });
+  // };
 
   render() {
     return (
       <View style={styles.container}>
         <ItemExpanded
-          itemSelected={this.state.itemSelected}
-          onCloseItem={this.closeItemHandler}
-          description={this.state.description}
-          addDescription={this.addDescriptionHandler}
-          onDelete={this.deleteItemHandler}
+          itemSelected={this.props.taskSelected}
+          onDeselectTask={this.closeItemHandler}
+          // description={this.state.description}
+          // addDescription={this.addDescriptionHandler}
+          onDeleteTask={this.deleteItemHandler}
         />
         <Text
           style={{
@@ -83,11 +63,11 @@ export default class App extends React.Component {
         >
           Tasks!
         </Text>
-        <TodoInput handleClick={this.itemAddedHandler} />
+        <TodoInput onAddTask={this.itemAddedHandler} />
         <View style={styles.list}>
           <TodoList
-            items={this.state.items}
-            onItemDeleted={this.itemSelectedHandler}
+            items={this.props.tasks}
+            onSelectTask={this.itemSelectedHandler}
           />
         </View>
       </View>
@@ -108,3 +88,40 @@ const styles = StyleSheet.create({
     alignItems: "flex-start"
   }
 });
+
+const store = configureStore();
+
+const mapStateToProps = state => {
+  return {
+    tasks: state.tasks.tasks,
+    taskSelected: state.tasks.taskSelected
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onAddTask: name => dispatch(addTask(name)),
+    onDeleteTask: () => dispatch(deleteTask()),
+    onSelectTask: key => dispatch(selectTask(key)),
+    onDeselectTask: () => dispatch(deselectTask())
+  };
+};
+
+function connectWithStore(store, WrappedComponent, ...args) {
+  var ConnectedWrappedComponent = connect(...args)(WrappedComponent);
+  return function(props) {
+    return <ConnectedWrappedComponent {...props} store={store} />;
+  };
+}
+
+export default connectWithStore(
+  store,
+  App,
+  mapStateToProps,
+  mapDispatchToProps
+);
+
+// export default connect(
+//   mapStateToProps,
+//   mapDispatchToProps
+// )(App);
