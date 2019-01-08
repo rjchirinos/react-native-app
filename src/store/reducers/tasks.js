@@ -18,7 +18,7 @@ const reducer = (state = initialState, action) => {
         tasks: state.tasks.concat({
           key: Math.random(),
           name: action.taskName,
-          description: ""
+          date: new Date()
         })
       };
     case DELETE_TASK:

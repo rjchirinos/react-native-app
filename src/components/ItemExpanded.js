@@ -65,7 +65,10 @@ class ItemExpanded extends React.Component {
             {this.props.itemSelected ? this.props.itemSelected.name : ""}
           </Text>
           <Text style={{ paddingTop: 20, fontWeight: "bold", color: "#fff" }}>
-            Description:
+            Date created:{" "}
+            {this.props.itemSelected
+              ? this.props.itemSelected.date.toDateString()
+              : ""}
           </Text>
           <View style={styles.buttonGroup}>
             <View style={{ paddingRight: 5 }}>

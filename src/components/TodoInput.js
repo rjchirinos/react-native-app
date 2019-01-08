@@ -1,5 +1,11 @@
 import React from "react";
-import { View, Button, TextInput, StyleSheet } from "react-native";
+import {
+  View,
+  Button,
+  TextInput,
+  StyleSheet,
+  TouchableNativeFeedback
+} from "react-native";
 
 class TodoInput extends React.Component {
   constructor(props) {
@@ -20,6 +26,7 @@ class TodoInput extends React.Component {
     return (
       <View style={styles.inputView}>
         <TextInput
+          ref={input => (this.textInput = input)}
           style={styles.input}
           value={this.state.placeName}
           onChangeText={this.handleChange}
@@ -31,7 +38,10 @@ class TodoInput extends React.Component {
           title="Add"
           style={styles.button}
           value={""}
-          onPress={() => this.props.onAddTask(this.state.placeName)}
+          onPress={() => {
+            this.textInput.clear();
+            return this.props.onAddTask(this.state.placeName);
+          }}
           color="rgba(255, 255, 255, 0.3)"
         />
       </View>
@@ -48,7 +58,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between"
   },
   button: {
-    width: "30%",
     borderRadius: 5
   },
   input: {
